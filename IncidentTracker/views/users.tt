@@ -1,0 +1,18 @@
+<table class="styled-table">
+<thead>
+  <tr><td>Name</td><td>Email</td><td>Phone</td><td>Type</td><td>Unit(s)</td></tr>
+</thead>
+<tbody>
+[% FOREACH user in users -%]
+  <tr>
+    <td><a href="/user/[% user.user_id %]">[% user.name %]</a></td>
+    <td>[% user.email %]</td>
+    <td>[% user.phone %]</td>
+    <td>[% user.user_type %]</td>
+    <td>[% user.units %]
+      <a href="/add_user_unit/[% user.user_id %]" class="fa fa-plus"></a>
+    </td>
+  </tr>
+[% END -%]
+</tbody>
+</table>

@@ -1,0 +1,4 @@
+<table border=0>
+<tr><td align="right"><strong>AGENT(S): </strong></td><td>[% unit.agents %]</td></tr>
+<tr><td align="right"><strong>OWNER(S): </strong></td><td>[% unit.owners %]</td></tr>
+</table>

@@ -1,0 +1,28 @@
+<form action="/add" method="post">
+<table id='add-incident-form' border=0>
+<tr><td align="right">DATE/TIME: </td><td><input type="date" name="incident_date" required /><input type="time" name="incident_time" /></td></tr>
+[% IF session.user.is_manager %]<tr><td align="right">UNIT #: </td><td><input type="text" name="unit" list="units" /></td></tr>[% END %]
+<tr><td align="right">TYPE/AREA OF ISSUE: </td><td><input type="text" name="category" list="categories" /></td></tr>
+[% IF session.user.is_manager %]<tr><td align="right">HOUSE RULE VIOLATION: </td><td><input type="text" name="rule" list="rules" /></td></tr>[% END %]
+<tr><td align="right">NOTES</td><td><textarea cols="50" rows="10" name="note" /></textarea></td></tr>
+</table>
+<input type="submit" value="Submit" />
+</form>
+
+<datalist id="units">
+  [% FOREACH unit IN units -%]
+  <option>[% unit.unit_number %]</option>
+  [% END -%]
+</datalist>
+<datalist id="categories">
+  [% FOREACH category IN categories -%]
+  <option>[% category.category %]</option>
+  [% END -%]
+</datalist>
+<datalist id="rules">
+  [% FOREACH rule IN rules -%]
+  <option>[% rule.rule %]</option>
+  [% END -%]
+</datalist>
+
+

@@ -1,0 +1,14 @@
+<form action="/user/[% user.user_id %]" method="post">
+<table id='edit-user-form' border=0>
+<tr><td align="right">NAME: </td><td><input type="text" name="name" value="[% user.name %]" required /></td></tr>
+<tr><td align="right">EMAIL: </td><td><input type="email" name="email" value="[% user.email %]" required /></td></tr>
+<tr><td align="right">PHONE: </td><td><input type="text" name="phone" value="[% user.phone %]" /></td></tr>
+<tr><td align="right">TYPE:</td><td>
+  <label><input type="checkbox" name="is_owner" value="1" [% IF user.is_owner %]checked[% END %] /> owner</label>
+  <label><input type="checkbox" name="is_agent" value="1" [% IF user.is_agent %]checked[% END %] /> agent</label>
+  <label><input type="checkbox" name="is_manager" value="1" [% IF user.is_manager %]checked[% END %] /> manager</label>
+  <label><input type="checkbox" name="is_board_member" value="1" [% IF user.is_board_member %]checked[% END %] /> board member</label>
+</td></tr>
+</table>
+<input type="submit" value="Submit" />
+</form>

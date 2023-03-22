@@ -1,2 +1,6 @@
 data
 *.swp
+*.swo
+environments/
+environments/
+sessions/

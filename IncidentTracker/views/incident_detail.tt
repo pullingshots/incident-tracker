@@ -1,0 +1,9 @@
+<table border=0>
+<tr><td align="right">DATE/TIME: </td><td>[% incident.incident_date %] [% IF incident.incident_time > 0 %][% incident.incident_time %][% END %]</td></tr>
+[% IF incident.category %]<tr><td align="right">TYPE/AREA OF ISSUE: </td><td>[% incident.category %]</td></tr>[% END %]
+[% IF incident.rule %]<tr><td align="right">HOUSE RULE VIOLATION: </td><td>[% incident.rule %]</td></tr>[% END %]
+[% IF manager %]<tr><td align="right">OWNER/AGENT CONTACT: </td><td>[% incident.name %] - [% incident.phone %] - [% incident.email %]</td></tr>
+[% ELSIF incident.manager_name %]<tr><td align="right">MANAGER CONTACT: </td><td>[% incident.manager_name %] - [% incident.manager_phone %] - [% incident.manager_email %]</td></tr>[% END %]
+</table>
+[% incident.notes %]
+<hr />

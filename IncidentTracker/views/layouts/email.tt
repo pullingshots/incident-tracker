@@ -1,0 +1,9 @@
+<html>
+<head></head>
+<body>
+[% content %]
+<footer>
+<p><a href="[% settings.site_url %]">Log in</a> to view photos and add notes to issues.</p>
+</footer>
+</body>
+</html>

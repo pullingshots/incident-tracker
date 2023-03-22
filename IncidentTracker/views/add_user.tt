@@ -1,0 +1,14 @@
+<form action="/add_user" method="post">
+<table id='add-user-form' border=0>
+<tr><td align="right">NAME: </td><td><input type="text" name="name" required /></td></tr>
+<tr><td align="right">EMAIL: </td><td><input type="email" name="email" required /></td></tr>
+<tr><td align="right">PHONE: </td><td><input type="text" name="phone" /></td></tr>
+<tr><td align="right">TYPE:</td><td>
+  <label><input type="checkbox" name="is_owner" value="1" /> owner</label>
+  <label><input type="checkbox" name="is_agent" value="1" /> agent</label>
+  <label><input type="checkbox" name="is_manager" value="1" /> manager</label>
+  <label><input type="checkbox" name="is_board_member" value="1" /> board member</label>
+</td></tr>
+</table>
+<input type="submit" value="Submit" />
+</form>

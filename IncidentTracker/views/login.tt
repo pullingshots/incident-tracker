@@ -1,0 +1,18 @@
+[% IF email -%]
+<form action="/login" method="post">
+  <input type="hidden" name="email" value="[% email %]" />
+  <p>Enter the login code that was sent to your email.</p>
+  Login code: <input type="text" name="login_code" required />
+  <input type="submit" value="Log in" />
+</form>
+<form action="/login" method="post">
+  <input type="hidden" name="email" value="[% email %]" />
+  <p><button type="submit" class="btn-link">Resend login code</button></p>
+</form>
+[% ELSE %]
+<form action="/login" method="post">
+  <p>Enter email address to log in.</p>
+  Email: <input type="email" name="email" value="[% email %]" required />
+  <input type="submit" value="Next" />
+</form>
+[% END %]

@@ -1,0 +1,72 @@
+<form action="/incidents" method="get">
+  From: <input type="date" name="start_date" value="[% session.search_start_date %]" />
+  To: <input type="date" name="end_date" value="[% session.search_end_date %]" />
+  Unit: <select name="unit">
+    <option value="">All</option>
+    [% FOREACH unit IN units -%]
+      <option [% IF session.search_unit == unit.unit_number %]selected[% END %]>[% unit.unit_number %]</option>
+    [% END -%]
+  </select>
+[% IF session.user.is_manager %]
+  Type/Area: <select name="category">
+    <option value="">All</option>
+    [% FOREACH category IN categories -%]
+      <option [% IF session.search_category == category.category %]selected[% END %]>[% category.category %]</option>
+    [% END -%]
+  </select>
+  House Rule: <select name="rule">
+    <option value="">All</option>
+    [% FOREACH rule IN rules -%]
+      <option [% IF session.search_rule == rule.rule %]selected[% END %]>[% rule.rule %]</option>
+    [% END -%]
+  </select>
+[% END %]
+  Deleted: <select name="deleted">
+    <option value="false">No</option>
+    <option value="true" [% IF session.search_deleted == 'true' %]selected[% END %]>Yes</option>
+  </select>
+  <input type="submit" value="Search" />
+</form>
+<table class="styled-table">
+<thead>
+  <tr><td>Date/Time</td>[% IF session.user.is_manager %]<td>Added by</td>[% END %]<td>Unit(s)</td><td>Type/Area</td><td>House Rule</td><td>Notes</td><td>Photos</td><td></td></tr>
+</thead>
+<tbody>
+[% FOREACH incident IN incidents -%]
+  <tr>
+    <td>[% incident.incident_date %] [% incident.incident_time %]</td>
+  [% IF session.user.is_manager %]
+    <td>[% incident.name %]</td>
+  [% END %]
+    <td>
+      [% incident.unit_number %]
+  [% IF session.user.is_manager %]
+      <a href="/add_incident_unit/[% incident.incident_id %]" class="fa fa-plus"></a>
+  [% END %]
+    </td>
+    <td>[% incident.category %]</td>
+    <td>[% incident.rule %]</td>
+    <td>[% incident.notes %]
+      <a href="/add_note/[% incident.incident_id %]" class="fa fa-plus"></a>
+    </td>
+    <td>
+      [% incident.photos %]
+      <a href="/add_photo/[% incident.incident_id %]" class="fa fa-plus"></a>
+    </td>
+    <td>
+  [% IF session.user_id == incident.user_id %]
+      [% IF session.search_deleted == 'true' %]
+      <form action="/restore_incident/[% incident.incident_id %]" method="post">
+      <button type="submit" class="fa fa-check" style="font-size: 2em;"></button>
+      </form>
+      [% ELSE %]
+      <form action="/delete_incident/[% incident.incident_id %]" method="post">
+      <button type="submit" class="fa fa-times-circle" style="color: #D8000C; font-size: 2em;"></button>
+      </form>
+      [% END %]
+  [% END %]
+    </td>
+  </tr>
+[% END -%]
+</tbody>
+</table>
