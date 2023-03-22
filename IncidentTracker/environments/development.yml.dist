@@ -1,0 +1,20 @@
+logger: "console"
+log: "core"
+show_errors: 1
+startup_info: 1
+site_url: 'http://localhost:5000'
+cron_key: 'secret'
+plugins:
+  Database:
+    driver: 'Pg'
+    database: 'incident_tracker'
+    host: 'localhost'
+    port: 5432
+    username: 'incident_tracker'
+    password: 'password'
+    on_connect_do: ["SET TIMEZONE TO 'US/Hawaii'"]
+    log_queries: 1
+  Emailesque:
+    from: 'mparkmanagement@gmail.com'
+    driver: 'sendmail'
+    path: '/home/baerg/bin/mhsendmail'

@@ -1,0 +1,12 @@
+<p>The following issues were added or updated in the past [% interval %]</p>
+
+[% FOREACH incident IN incidents %]
+<table border=0>
+<tr><td align="right">DATE/TIME: </td><td>[% incident.incident_date %] [% IF incident.incident_time > 0 %][% incident.incident_time %][% END %]</td></tr>
+[% IF incident.category %]<tr><td align="right">TYPE/AREA OF ISSUE: </td><td>[% incident.category %]</td></tr>[% END %]
+[% IF incident.rule %]<tr><td align="right">HOUSE RULE VIOLATION: </td><td>[% incident.rule %]</td></tr>[% END %]
+[% IF board_member %]<tr><td align="right">UNIT(s): </td><td>[% FOREACH unit IN incident.units %][% unit %] [% END %]</td></tr>[% END %]
+</table>
+[% incident.notes %]
+<hr />
+[% END %]

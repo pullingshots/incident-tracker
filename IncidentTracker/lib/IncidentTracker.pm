@@ -10,7 +10,10 @@ sub get_flash { my $msg = session('flash'); session flash => ''; return $msg; }
 
 hook before => sub {
   if (request->path =~ m{^/cron}) {
-    return;
+    if (query_parameters->get('key') eq config->{cron_key}) {
+      return;
+    }
+    forward '/';
   }
 
   if (!session('user_id') && request->path !~ m{^/login}) {
@@ -473,6 +476,44 @@ get 'photo/:photo_id' => sub {
 };
 
 get 'cron/daily' => sub {
+  my $sql = "SELECT * FROM incidents_full WHERE ? = any (units) AND update_date > current_timestamp - interval '24 hours'";
+  my $sth = database->prepare($sql);
+  foreach my $unit_owner (database->quick_select('units_user', { is_owner => 'true' }, { })) {
+    $sth->execute($unit_owner->{unit_number});
+    my $incidents = $sth->fetchall_arrayref({});
+    if (@{$incidents}) {
+      email {
+        to => $unit_owner->{email},
+        subject => "Daily issue summary for unit # $unit_owner->{unit_number}",
+        type => "html",
+        message => template 'incident_summary', {
+            incidents => $incidents,
+            interval => '24 hours',
+          },
+          { layout => 'email' },
+      };
+    }
+  }
+
+  $sql = "SELECT * FROM incidents_full WHERE update_date > current_timestamp - interval '24 hours'";
+  $sth = database->prepare($sql);
+  $sth->execute();
+  my $incidents = $sth->fetchall_arrayref({});
+  if (@{$incidents}) {
+    my $to = join ',', map { $_->{email} } database->quick_select('users', { is_board_member => 'true' }, {});
+    email {
+      to => $to,
+      subject => "Daily issue summary",
+      type => "html",
+      message => template 'incident_summary', {
+          incidents => $incidents,
+          interval => '24 hours',
+          board_member => 1,
+        },
+        { layout => 'email' },
+    };
+  }
+
   1;
 };
 
