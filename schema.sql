@@ -2,37 +2,44 @@
 -- CREATE ROLE incident_tracker WITH LOGIN PASSWORD 'password';
 -- GRANT ALL ON DATABASE incident_tracker TO incident_tracker;
 
-\c incident_tracker incident_tracker
+-- \c incident_tracker incident_tracker
 
-DROP VIEW users_full;
-DROP VIEW incidents_full;
-DROP VIEW units_active;
-DROP VIEW rules_active;
-DROP VIEW categories_active;
-DROP VIEW units_full;
-DROP VIEW units_user;
-DROP VIEW incident_notifications;
-DROP TABLE incident_unit;
-DROP TABLE user_unit;
-DROP TABLE units;
-DROP TABLE incident_photos;
-DROP TABLE incident_notes;
-DROP TABLE incidents;
-DROP TABLE users;
-DROP TABLE rules;
-DROP TABLE categories;
-DROP FUNCTION get_login_code;
-DROP FUNCTION validate_user;
-DROP FUNCTION add_incident;
-DROP FUNCTION add_incident_unit;
-DROP FUNCTION add_note;
-DROP FUNCTION delete_incident;
-DROP FUNCTION restore_incident;
-DROP FUNCTION add_user;
-DROP FUNCTION edit_user;
-DROP FUNCTION add_user_unit;
+-- DROP VIEW users_full;
+-- DROP VIEW incidents_full;
+-- DROP VIEW units_active;
+-- DROP VIEW rules_active;
+-- DROP VIEW categories_active;
+-- DROP VIEW units_full;
+-- DROP VIEW units_user;
+-- DROP VIEW incident_notifications;
+-- DROP TABLE incident_unit;
+-- DROP TABLE user_unit;
+-- DROP TABLE units;
+-- DROP TABLE incident_photos;
+-- DROP TABLE incident_notes;
+-- DROP TABLE incidents;
+-- DROP TABLE users;
+-- DROP TABLE rules;
+-- DROP TABLE categories;
+-- DROP TABLE migration;
+-- DROP FUNCTION get_login_code;
+-- DROP FUNCTION validate_user;
+-- DROP FUNCTION add_incident;
+-- DROP FUNCTION add_incident_unit;
+-- DROP FUNCTION add_note;
+-- DROP FUNCTION delete_incident;
+-- DROP FUNCTION restore_incident;
+-- DROP FUNCTION add_user;
+-- DROP FUNCTION edit_user;
+-- DROP FUNCTION add_user_unit;
 
 BEGIN;
+
+CREATE TABLE IF NOT EXISTS migration (
+  version text PRIMARY KEY
+);
+
+INSERT INTO migration values ('001');
 
 CREATE TABLE IF NOT EXISTS users (
   user_id serial PRIMARY KEY,
@@ -46,8 +53,10 @@ CREATE TABLE IF NOT EXISTS users (
   login_code text NOT NULL DEFAULT ''
 );
 
-INSERT INTO users (name, email, is_manager) VALUES ('Andrew Baerg', 'andrew@pullingshots.ca', true);
-INSERT INTO users (name, email, is_agent) VALUES ('Andrew Baerg', 'andrew.baerg@gmail.com', true);
+INSERT INTO users (name, email, is_manager) VALUES ('Manager', 'manager@incident-tracker.io', true);
+INSERT INTO users (name, email, is_agent) VALUES ('Agent', 'agent@incident-tracker.io', true);
+INSERT INTO users (name, email, is_owner) VALUES ('Owner', 'owner@incident-tracker.io', true);
+INSERT INTO users (name, email, is_board_member) VALUES ('Board Member', 'board_member@incident-tracker.io', true);
 
 CREATE OR REPLACE FUNCTION get_login_code(email text)
 RETURNS text

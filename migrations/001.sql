@@ -1,3 +1,11 @@
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS migration (
+  version text PRIMARY KEY
+);
+
+INSERT INTO migration values ('001');
+
 DROP view incidents_full;
 DROP view units_user;
 
@@ -30,3 +38,5 @@ SELECT i.incident_id,
 
 CREATE VIEW units_user AS
   SELECT u.*, us.* FROM units u JOIN user_unit uu USING (unit_id) JOIN users us USING (user_id);
+
+COMMIT;
