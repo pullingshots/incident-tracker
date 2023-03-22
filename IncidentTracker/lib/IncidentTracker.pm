@@ -247,7 +247,7 @@ get '/incidents' => sub {
   }
   else {
     $units = [ database->quick_select('units_user', { user_id => session('user_id') }, { order_by => 'unit_number' }) ];
-    if (session('search_deleted')) {
+    if (session('search_deleted') eq 'true') {
       $where .= "AND user_id = ? ";
       push @params, session('user_id');
     }
@@ -263,7 +263,8 @@ get '/incidents' => sub {
   }
   
   my $sql = "SELECT * FROM incidents_full WHERE $where ORDER BY incident_date desc";
-debug $sql;
+debug "incidents query: $sql";
+debug "query params: @params";
   my $sth = database->prepare($sql);
   $sth->execute(@params);
 
