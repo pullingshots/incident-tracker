@@ -476,7 +476,7 @@ get 'photo/:photo_id' => sub {
 };
 
 get 'cron/daily' => sub {
-  my $sql = "SELECT * FROM incidents_full WHERE ? = any (units) AND update_date > current_timestamp - interval '24 hours'";
+  my $sql = "SELECT * FROM incidents_full WHERE ? = any (units) AND update_date > current_timestamp - interval '24 hours' AND deleted is false";
   my $sth = database->prepare($sql);
   foreach my $unit_owner (database->quick_select('units_user', { is_owner => 'true' }, { })) {
     $sth->execute($unit_owner->{unit_number});
@@ -495,7 +495,7 @@ get 'cron/daily' => sub {
     }
   }
 
-  $sql = "SELECT * FROM incidents_full WHERE update_date > current_timestamp - interval '24 hours'";
+  $sql = "SELECT * FROM incidents_full WHERE update_date > current_timestamp - interval '24 hours' AND deleted is false";
   $sth = database->prepare($sql);
   $sth->execute();
   my $incidents = $sth->fetchall_arrayref({});
@@ -514,7 +514,7 @@ get 'cron/daily' => sub {
     };
   }
 
-  1;
+  return;
 };
 
 true;
