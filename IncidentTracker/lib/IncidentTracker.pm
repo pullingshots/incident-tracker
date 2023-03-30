@@ -16,10 +16,23 @@ hook before => sub {
     forward '/';
   }
 
+  if (query_parameters->get('continue')) {
+    session sso_url => query_parameters->get('continue');
+  }
+
   if (!session('user_id') && request->path !~ m{^/login}) {
     forward '/login';
   }
   session user => database->quick_select('users', { user_id => session('user_id') });
+
+  if (session('sso_url') && session('user')) {
+    use File::Slurp qw(read_file);
+    use Crypt::JWT qw(encode_jwt);
+    my $key = read_file('jwt.key');
+    my $jwt = encode_jwt(payload => { email => session('user')->{email} }, alg => 'RS256', key => \$key);
+    session sso_url => undef;
+    redirect session('sso_url') . "?jwt=$jwt";
+  }
 
   if (session('user') && !session('user')->{is_manager} && request->path =~ m{^/(user|add_user|unit|add_incident_unit)}) {
     forward '/login';

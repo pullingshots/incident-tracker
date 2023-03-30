@@ -5,3 +5,5 @@ environments/
 environments/
 sessions/
 app.pid
+*.key
+*.key.pub
