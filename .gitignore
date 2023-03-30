@@ -4,3 +4,4 @@ data
 environments/
 environments/
 sessions/
+app.pid
