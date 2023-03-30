@@ -30,8 +30,9 @@ hook before => sub {
     use Crypt::JWT qw(encode_jwt);
     my $key = read_file('jwt.key');
     my $jwt = encode_jwt(payload => { email => session('user')->{email} }, alg => 'RS256', key => \$key);
+    my $url = session('sso_url') . "?jwt=$jwt";
     session sso_url => undef;
-    redirect session('sso_url') . "?jwt=$jwt";
+    redirect $url;
   }
 
   if (session('user') && !session('user')->{is_manager} && request->path =~ m{^/(user|add_user|unit|add_incident_unit)}) {
