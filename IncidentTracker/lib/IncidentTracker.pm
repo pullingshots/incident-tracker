@@ -25,7 +25,7 @@ hook before => sub {
   }
   session user => database->quick_select('users', { user_id => session('user_id') });
 
-  if (session('sso_url') && session('user')) {
+  if (session('sso_url') && session('user') && request->path !~ m{^/logout}) {
     use File::Slurp qw(read_file);
     use Crypt::JWT qw(encode_jwt);
     my $key = read_file('jwt.key');
