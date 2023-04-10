@@ -29,7 +29,10 @@ hook before => sub {
     use File::Slurp qw(read_file);
     use Crypt::JWT qw(encode_jwt);
     my $key = read_file('jwt.key');
-    my $jwt = encode_jwt(payload => { email => session('user')->{email} }, alg => 'RS256', key => \$key);
+    my $payload = session('user');
+    $payload->{iat} = time;
+    $payload->{exp} = time + (60*24*30);
+    my $jwt = encode_jwt(payload => $payload, alg => 'RS256', key => \$key);
     my $url = session('sso_url') . "?jwt=$jwt";
     session sso_url => undef;
     redirect $url;
