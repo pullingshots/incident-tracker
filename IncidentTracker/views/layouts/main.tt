@@ -29,7 +29,7 @@
               <li><a href="/users">View Users</a></li>
               <li><a href="/add_user">Add User</a></li>
               [% END %]
-              <li><a href="/login">Logout</a></li>
+              <li><a href="/logout">Logout</a></li>
               [% END %]
             </ul>
           </li>

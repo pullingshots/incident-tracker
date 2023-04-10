@@ -31,7 +31,7 @@ hook before => sub {
     my $key = read_file('jwt.key');
     my $payload = session('user');
     $payload->{iat} = time;
-    $payload->{exp} = time + (60*24*30);
+    $payload->{exp} = time + (60*60*24*30);
     my $jwt = encode_jwt(payload => $payload, alg => 'RS256', key => \$key);
     my $url = session('sso_url') . "?jwt=$jwt";
     session sso_url => undef;
@@ -55,9 +55,16 @@ hook 'database_error' => sub {
   redirect '/error';
 };
 
-get '/login' => sub {
+get '/logout' => sub {
   session user_id => undef;
   session user => undef;
+  redirect 'login';
+};
+
+get '/login' => sub {
+  if (session('user')) {
+    redirect '/';
+  }
   template 'login';
 };
 
