@@ -34,7 +34,7 @@
 <tbody>
 [% FOREACH incident IN incidents -%]
   <tr>
-    <td>[% incident.incident_date %] [% incident.incident_time %]</td>
+    <td><a href="/edit_incident/[% incident.incident_id %]">[% incident.incident_date %] [% incident.incident_time %]</a></td>
   [% IF session.user.is_manager %]
     <td>[% incident.name %]</td>
   [% END %]

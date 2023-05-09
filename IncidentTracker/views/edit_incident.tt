@@ -1,0 +1,43 @@
+<form action="/edit_incident/[% incident.incident_id %]" method="post">
+<table>
+  <tr><td align="right">DATE/TIME: </td><td><input type="date" name="incident_date" value="[% incident.incident_date %]" required /><input type="time" name="incident_time" value="[% incident.incident_time %]" /></td></tr>
+  <tr><td align="right">ADDED BY: </td><td>[% incident.name %]</td></tr>
+    <tr><td align="right">UNIT(s): </td><td>
+      [% incident.unit_number %]
+      <a href="/add_incident_unit/[% incident.incident_id %]" class="fa fa-plus">Add Unit</a>
+    </td></tr>
+    <tr><td align="right">TYPE/AREA OF ISSUE: </td><td><input type="text" name="category" list="categories" value="[% incident.category %]" /></td></tr>
+    <tr><td align="right">HOUSE RULE VIOLATION: </td><td><input type="text" name="rule" list="rules" value="[% incident.rule %]" /></td></tr>
+    <tr><td colspan="2">
+      <button type="submit">Submit</button>
+    </td></tr>
+    <tr><td align="right">NOTES: </td><td>[% incident.notes %]
+      <a href="/add_note/[% incident.incident_id %]" class="fa fa-plus">Add Note</a>
+    </td></tr>
+    <tr><td align="right">PHOTOS: </td><td>
+      [% incident.photos %]
+      <a href="/add_photo/[% incident.incident_id %]" class="fa fa-plus">Add Photo</a>
+    </td></tr>
+</table>
+</form>
+
+[% IF incident.deleted %]
+<form action="/restore_incident/[% incident.incident_id %]" method="post">
+<button type="submit">Restore Issue</button>
+</form>
+[% ELSE %]
+<form action="/delete_incident/[% incident.incident_id %]" method="post">
+<button type="submit">Delete Issue</button>
+</form>
+[% END %]
+
+<datalist id="categories">
+  [% FOREACH category IN categories -%]
+  <option>[% category.category %]</option>
+  [% END -%]
+</datalist>
+<datalist id="rules">
+  [% FOREACH rule IN rules -%]
+  <option>[% rule.rule %]</option>
+  [% END -%]
+</datalist>

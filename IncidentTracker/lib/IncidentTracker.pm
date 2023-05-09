@@ -38,7 +38,7 @@ hook before => sub {
     redirect $url;
   }
 
-  if (session('user') && !session('user')->{is_manager} && request->path =~ m{^/(user|add_user|unit|add_incident_unit)}) {
+  if (session('user') && !session('user')->{is_manager} && request->path =~ m{^/(user|add_user|unit|add_incident_unit|edit_incident)}) {
     forward '/login';
   }
 };
@@ -321,6 +321,31 @@ debug "query params: @params";
     'rules' => [ database->quick_select('rules_active', {}, { order_by => 'rule' }) ],
     'incidents' => $sth->fetchall_arrayref({}),
   };
+};
+
+get '/edit_incident/:incident_id' => sub {
+  my $incident = database->quick_select('incidents_full', { incident_id => route_parameters->get('incident_id') });
+  template 'edit_incident' => {
+    'title' => 'Edit Issue',
+    'incident' => $incident,
+    'categories' => [ database->quick_select('categories_active', {}, { order_by => 'category' }) ],
+    'rules' => [ database->quick_select('rules_active', {}, { order_by => 'rule' }) ],
+  };
+};
+
+post '/edit_incident/:incident_id' => sub {
+  my $sql = 'select edit_incident( incident_id := ?, incident_date := ?, category := ?, rule := ?, user_id := ? )';
+  my $sth = database->prepare($sql);
+  $sth->execute(
+    route_parameters->get('incident_id'),
+    body_parameters->get('incident_date') . (body_parameters->get('incident_time') ? ' ' . body_parameters->get('incident_time') : ''),
+    body_parameters->get('category'),
+    body_parameters->get('rule'),
+    session('user_id')
+  );
+
+  set_flash('Issue updated!');
+  redirect '/incidents';
 };
 
 get '/add' => sub {
