@@ -1,4 +1,8 @@
+<form action="/unit/[% unit.unit_id %]" method="post">
 <table border=0>
 <tr><td align="right"><strong>AGENT(S): </strong></td><td>[% unit.agents %]</td></tr>
 <tr><td align="right"><strong>OWNER(S): </strong></td><td>[% unit.owners %]</td></tr>
+<tr><td align="right"><strong>NOTE: </strong></td><td><textarea cols="50" rows="10" name="note">[% unit.note %]</textarea></td></tr>
 </table>
+<input type="submit" value="Submit" />
+</form>

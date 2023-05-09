@@ -1,0 +1,15 @@
+<table class="styled-table">
+<thead>
+  <tr><td>Unit</td><td>Agent(s)</td><td>Owner(s)</td><td>Note</td></tr>
+</thead>
+<tbody>
+[% FOREACH unit in units -%]
+  <tr>
+    <td><a href="/unit/[% unit.unit_id %]">[% unit.unit_number %]</a></td>
+    <td>[% unit.agents_short %]</td>
+    <td>[% unit.owners_short %]</td>
+    <td>[% unit.note %]</td>
+  </tr>
+[% END -%]
+</tbody>
+</table>

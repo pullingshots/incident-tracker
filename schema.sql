@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS migration (
 );
 
 INSERT INTO migration values ('001');
+INSERT INTO migration values ('002');
 
 CREATE TABLE IF NOT EXISTS users (
   user_id serial PRIMARY KEY,
@@ -103,7 +104,8 @@ $$;
 
 CREATE TABLE IF NOT EXISTS units (
   unit_id serial PRIMARY KEY,
-  unit_number text NOT NULL
+  unit_number text NOT NULL,
+  note text
 );
 
 CREATE TABLE IF NOT EXISTS user_unit (
@@ -159,19 +161,23 @@ CREATE TABLE IF NOT EXISTS incident_notes (
 );
 
 CREATE VIEW units_full AS
-  SELECT u.unit_id, u.unit_number,
-    STRING_AGG(distinct $$<p>$$ || uso.name || ' - ' || uso.email || ' - ' || uso.phone || $$</p>
+  SELECT u.unit_id, u.unit_number, u.note,
+    STRING_AGG(distinct '<a href="/user/' || uso.user_id || '">' || uso.name || '</a>' || ' - ' || uso.email || ' - ' || uso.phone, '<br />') as owners_short,
+    STRING_AGG(distinct '<a href="/user/' || usa.user_id || '">' || usa.name || '</a>' || ' - ' || usa.email || ' - ' || usa.phone, '<br />') as agents_short,
+    STRING_AGG(distinct $$<p>
       <form action="/remove_user_unit" method="post">
+        $$ || '<a href="/user/' || uso.user_id || '">' || uso.name || '</a>' || ' - ' || uso.email || ' - ' || uso.phone || $$
         <input type="hidden" name="user_id" value="$$ || uu.user_id || $$">
         <input type="hidden" name="unit_id" value="$$ || uu.unit_id || $$">
         <input type="submit" value="Remove">
-      </form>$$, ' ') as owners,
-    STRING_AGG(distinct $$<p>$$ || usa.name || ' - ' || usa.email || ' - ' || usa.phone || $$</p>
+      </form></p>$$, ' ') as owners,
+    STRING_AGG(distinct $$<p>
       <form action="/remove_user_unit" method="post">
+        $$ || '<a href="/user/' || usa.user_id || '">' || usa.name || '</a>' || ' - ' || usa.email || ' - ' || usa.phone || $$
         <input type="hidden" name="user_id" value="$$ || uu.user_id || $$">
         <input type="hidden" name="unit_id" value="$$ || uu.unit_id || $$">
         <input type="submit" value="Remove">
-      </form>$$, ' ') as agents
+      </form></p>$$, ' ') as agents
   FROM units u
     LEFT JOIN user_unit uu USING (unit_id)
     LEFT JOIN users uso ON uso.user_id=uu.user_id AND uso.is_owner
@@ -459,6 +465,23 @@ BEGIN
   IF manager_id is NOT NULL THEN UPDATE incidents SET manager=manager_id WHERE incidents.incident_id=add_incident_id; END IF;
 
   RETURN false;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION edit_unit(
+  unit_id int,
+  note text default ''
+)
+  RETURNS boolean
+  LANGUAGE plpgsql
+as
+$$
+DECLARE
+BEGIN
+  UPDATE units u SET
+    note=edit_unit.note
+  WHERE u.unit_id=edit_unit.unit_id;
+  RETURN FOUND;
 END;
 $$;
 

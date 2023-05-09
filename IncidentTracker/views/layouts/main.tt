@@ -26,6 +26,7 @@
               <li><a href="/incidents">View Issues</a></li>
               <li><a href="/add">Submit Issue</a></li>
               [% IF session.user.is_manager %]
+              <li><a href="/units">View Units</a></li>
               <li><a href="/users">View Users</a></li>
               <li><a href="/add_user">Add User</a></li>
               [% END %]

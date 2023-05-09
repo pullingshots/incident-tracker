@@ -216,12 +216,31 @@ post '/remove_user_unit' => sub {
   redirect '/users';
 };
 
+get '/units' => sub {
+  template 'units' => {
+    'title' => 'Units',
+    'units' => [ database->quick_select('units_full', {}, { order_by => 'unit_number' }) ],
+  };
+};
+
 get '/unit/:unit_id' => sub {
   my $unit = database->quick_select('units_full', { unit_id => route_parameters->get('unit_id') });
   template 'unit' => {
     'title' => 'Unit # ' . $unit->{unit_number},
     'unit' => $unit,
   };
+};
+
+post '/unit/:unit_id' => sub {
+  my $sql = 'select edit_unit( unit_id := ?, note := ? )';
+  my $sth = database->prepare($sql);
+  $sth->execute(
+    route_parameters->get('unit_id'),
+    body_parameters->get('note'),
+  );
+
+  set_flash('Unit updated!');
+  redirect '/units';
 };
 
 get '/incidents' => sub {
