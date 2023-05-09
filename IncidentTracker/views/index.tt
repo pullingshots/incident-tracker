@@ -7,7 +7,9 @@
 <p>[% manager.name %] - [% manager.phone %] - [% manager.email %]</p>
 [% END -%]
 
+[% IF session.user.is_manager %]
 <h2>Board Member Contact Info</h2>
 [% FOREACH board_member IN board_members -%]
 <p>[% board_member.name %] - [% board_member.phone %] - [% board_member.email %]</p>
 [% END -%]
+[% END %]
