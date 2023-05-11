@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS migration (
 INSERT INTO migration values ('001');
 INSERT INTO migration values ('002');
 INSERT INTO migration values ('003');
+INSERT INTO migration values ('004');
 
 CREATE TABLE IF NOT EXISTS users (
   user_id serial PRIMARY KEY,
@@ -162,6 +163,7 @@ CREATE TABLE IF NOT EXISTS incident_notes (
 );
 
 CREATE VIEW units_full AS
+  SELECT * FROM (
   SELECT u.unit_id, u.unit_number, u.note,
     STRING_AGG(distinct '<a href="/user/' || uso.user_id || '">' || uso.name || '</a>' || ' - ' || uso.email || ' - ' || uso.phone, '<br />') as owners_short,
     STRING_AGG(distinct '<a href="/user/' || usa.user_id || '">' || usa.name || '</a>' || ' - ' || usa.email || ' - ' || usa.phone, '<br />') as agents_short,
@@ -183,7 +185,8 @@ CREATE VIEW units_full AS
     LEFT JOIN user_unit uu USING (unit_id)
     LEFT JOIN users uso ON uso.user_id=uu.user_id AND uso.is_owner
     LEFT JOIN users usa ON usa.user_id=uu.user_id AND usa.is_agent
-  GROUP BY u.unit_id, u.unit_number;
+  GROUP BY u.unit_id, u.unit_number) u
+  WHERE (agents IS NOT NULL OR owners IS NOT NULL);
 
 CREATE VIEW users_full AS
   SELECT u.user_id, u.name, u.email, u.phone,
