@@ -2,7 +2,7 @@
 <form action="/login" method="post">
   <input type="hidden" name="email" value="[% email %]" />
   <p>Enter the login code that was sent to your email.</p>
-  Login code: <input type="text" name="login_code" required />
+  Login code: <input type="text" name="login_code" autofocus required />
   <input type="submit" value="Log in" />
 </form>
 <form action="/login" method="post">
@@ -12,7 +12,7 @@
 [% ELSE %]
 <form action="/login" method="post">
   <p>Enter email address to log in.</p>
-  Email: <input type="email" name="email" value="[% email %]" required />
+  Email: <input type="email" name="email" value="[% email %]" autofocus required />
   <input type="submit" value="Next" />
 </form>
 [% END %]

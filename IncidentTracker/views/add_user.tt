@@ -1,6 +1,6 @@
 <form action="/add_user" method="post">
 <table id='add-user-form' border=0>
-<tr><td align="right">NAME: </td><td><input type="text" name="name" required /></td></tr>
+<tr><td align="right">NAME: </td><td><input type="text" name="name" autofocus required /></td></tr>
 <tr><td align="right">EMAIL: </td><td><input type="email" name="email" required /></td></tr>
 <tr><td align="right">PHONE: </td><td><input type="text" name="phone" /></td></tr>
 <tr><td align="right">TYPE:</td><td>

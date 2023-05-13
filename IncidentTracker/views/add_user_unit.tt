@@ -1,6 +1,6 @@
 <form action="/add_user_unit/[% user_id %]" method="post">
 <table id='add-user-unit-form' border=0>
-<tr><td align="right">UNIT: </td><td><input type="text" name="unit" list="units" /></td></tr>
+<tr><td align="right">UNIT: </td><td><input type="text" name="unit" list="units" autofocus /></td></tr>
 </table>
 <input type="submit" value="Add" />
 </form>

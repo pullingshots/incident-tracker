@@ -1,6 +1,6 @@
 <form action="/add_note/[% incident_id %]" method="post">
 <table id='add-note-form' border=0>
-<tr><td align="right">NOTES</td><td><textarea cols="50" rows="10" name="note" /></textarea></td></tr>
+<tr><td align="right">NOTES</td><td><textarea cols="50" rows="10" name="note" autofocus /></textarea></td></tr>
 </table>
 <input type="submit" value="Add" />
 </form>
