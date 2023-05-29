@@ -43,6 +43,7 @@ INSERT INTO migration values ('001');
 INSERT INTO migration values ('002');
 INSERT INTO migration values ('003');
 INSERT INTO migration values ('004');
+INSERT INTO migration values ('005');
 
 CREATE TABLE IF NOT EXISTS users (
   user_id serial PRIMARY KEY,
@@ -70,7 +71,8 @@ DECLARE
   user_login_code text;
 BEGIN
   IF email != ''
-    THEN SELECT INTO user_user_id u.user_id FROM users u WHERE u.email = get_login_code.email;
+    THEN SELECT INTO user_user_id u.user_id FROM users u WHERE u.email = get_login_code.email
+      AND (u.is_agent OR u.is_owner OR u.is_board_member OR u.is_manager);
       IF user_user_id IS NULL
         THEN RETURN '';
       END IF;
@@ -189,7 +191,7 @@ CREATE VIEW units_full AS
   WHERE (agents IS NOT NULL OR owners IS NOT NULL);
 
 CREATE VIEW users_full AS
-  SELECT u.user_id, u.name, u.email, u.phone,
+  SELECT u.user_id, u.name, u.email, u.phone, u.is_owner, u.is_agent, u.is_manager, u.is_board_member,
     CONCAT_WS(', ', CASE WHEN u.is_owner THEN 'owner' END, CASE WHEN u.is_agent THEN 'agent' END, CASE WHEN u.is_manager THEN 'manager' END, CASE WHEN u.is_board_member THEN 'board member' END) as user_type,
     STRING_AGG(distinct $$<a href='/unit/$$ || un.unit_id || $$'> $$ || un.unit_number || $$</a>$$, ', ') as units
   FROM users u

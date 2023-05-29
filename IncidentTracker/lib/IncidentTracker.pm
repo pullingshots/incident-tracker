@@ -122,8 +122,26 @@ get '/' => sub {
 get '/users' => sub {
   template 'users' => {
     'title' => 'Users',
-    'users' => [ database->quick_select('users_full', {}, { order_by => 'name' }) ],
+    'users' => [ database->quick_select('users_full', { user_type => { 'ne' => '' } }, { order_by => 'name' }) ],
   };
+};
+
+get '/users/:type' => sub {
+  if (route_parameters->get('type') =~ /^(agent|owner|board_member|manager)$/) {
+    template 'users' => {
+      'title' => 'Users',
+      'users' => [ database->quick_select('users_full', { 'is_' . route_parameters->get('type') => 1 }, { order_by => 'name' }) ],
+    };
+  }
+  elsif (route_parameters->get('type') eq 'disabled') {
+    template 'users' => {
+      'title' => 'Users',
+      'users' => [ database->quick_select('users_full', { is_manager => 0, is_owner => 0, is_agent => 0, is_board_member => 0 }, { order_by => 'name' }) ],
+    };
+  }
+  else {
+    redirect '/users';
+  }
 };
 
 get '/add_user' => sub {

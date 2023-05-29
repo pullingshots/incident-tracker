@@ -1,3 +1,14 @@
+<p>
+  <a href="/users/agent">Agents</a>
+  |
+  <a href="/users/owner">Owners</a>
+  |
+  <a href="/users/board_member">Board Members</a>
+  |
+  <a href="/users/manager">Managers</a>
+  |
+  <a href="/users/disabled">Disabled</a>
+</p>
 <table class="styled-table">
 <thead>
   <tr><td>Name</td><td>Email</td><td>Phone</td><td>Type</td><td>Unit(s)</td></tr>
@@ -10,7 +21,9 @@
     <td>[% user.phone %]</td>
     <td>[% user.user_type %]</td>
     <td>[% user.units %]
+      [% IF user.is_agent || user.is_owner %]
       <a href="/add_user_unit/[% user.user_id %]" class="fa fa-plus"></a>
+      [% END -%]
     </td>
   </tr>
 [% END -%]
